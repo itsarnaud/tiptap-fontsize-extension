@@ -14,7 +14,7 @@ npm i tiptap-fontsize-extension
 
 ```js
 import { Editor } from '@tiptap/core';
-import FontSize from 'tiptap-font-size';
+import FontSize from 'tiptap-fontsize-extension';
 
 const editor = new Editor({
   extensions: [
