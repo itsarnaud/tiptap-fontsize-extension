@@ -1,6 +1,6 @@
 {
   "name": "tiptap-fontsize-extension",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A Tiptap extension for adjusting font size in text editors.",
   "main": "src/index.js",
   "keywords": [
@@ -12,5 +12,9 @@
   "license": "MIT",
   "dependencies": {
     "@tiptap/core": "^2.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/itsarnaud/tiptap-fontsize-extension.git"
   }
 }
