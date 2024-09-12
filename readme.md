@@ -44,16 +44,4 @@ editor.commands.increaseFontSize();
 editor.commands.decreaseFontSize();
 ```
 
-## Configuration
-
-You can configure the default font size if none is specified dans le code source.
-
-```js
-addOptions() {
-    return {
-      defaultSize: '13px', // Default font size if none is specified
-    };
-  },
-```
-
 PRs are welcome 😃❤️
