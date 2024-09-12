@@ -6,6 +6,7 @@ const FontSize = Mark.create({
   addOptions() {
     return {
       defaultSize: '13px',
+      step: 1,
     };
   },
 
@@ -56,7 +57,7 @@ const FontSize = Mark.create({
           });
         }
 
-        const newSize = (parseInt(currentFontSize.replace('px', '')) + 1) + 'px';
+        const newSize = (parseInt(currentFontSize.replace('px', '')) + this.options.step) + 'px';
         return commands.setMark(this.name, { size: newSize });
       },
 
@@ -76,7 +77,7 @@ const FontSize = Mark.create({
           });
         }
 
-        const newSize = Math.max(1, parseInt(currentFontSize.replace('px', '')) - 1) + 'px';
+        const newSize = Math.max(1, parseInt(currentFontSize.replace('px', '')) - this.options.step) + 'px';
         return commands.setMark(this.name, { size: newSize });
       },
 

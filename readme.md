@@ -20,6 +20,7 @@ const editor = new Editor({
   extensions: [
     FontSize.configure({
       defaultSize: '16px',
+      step: 1
     }),
     // other extensions
   ],
