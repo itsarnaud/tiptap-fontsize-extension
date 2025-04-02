@@ -36,6 +36,40 @@ const FontSize = Mark.create({
 
   addCommands() {
     return {
+
+      getFontSize: () => ({ state }) => {
+        const { from, to } = state.selection;
+        const isClick = from === to;
+
+        let currentFontSize = this.options.defaultSize;
+
+        if (isClick) {
+          const $pos = state.doc.resolve(from);
+          const marks = $pos.marks();
+          
+          for (const mark of marks) {
+            if (mark.type.name === this.name && mark.attrs.size) {
+              currentFontSize = mark.attrs.size;
+              break;
+            }
+          }
+        } 
+        else {
+          const marks = state.doc.rangeHasMark(from, to, this.type);
+          
+          if (marks) {
+            state.doc.nodesBetween(from, to, node => {
+              node.marks.forEach(mark => {
+                if (mark.type.name === this.name && mark.attrs.size) {
+                  currentFontSize = mark.attrs.size;
+                }
+              })
+            })
+          }
+        }
+
+        return currentFontSize;
+      },
     
       setFontSize: size => ({ commands }) => {
         return commands.setMark(this.name, { size });
