@@ -35,40 +35,43 @@ const FontSize = Mark.create({
   },
 
   addCommands() {
+    const getCurrentFontSize = (state) => {
+      const { from, to } = state.selection;
+      const isClick = from === to;
+      let currentFontSize = this.options.defaultSize;
+
+      if (isClick) {
+        const $pos = state.doc.resolve(from);
+        const marks = $pos.marks();
+        
+        for (const mark of marks) {
+          if (mark.type.name === this.name && mark.attrs.size) {
+            currentFontSize = mark.attrs.size;
+            break;
+          }
+        }
+      } 
+      else {
+        const marks = state.doc.rangeHasMark(from, to, this.type);
+        
+        if (marks) {
+          state.doc.nodesBetween(from, to, node => {
+            node.marks.forEach(mark => {
+              if (mark.type.name === this.name && mark.attrs.size) {
+                currentFontSize = mark.attrs.size;
+              }
+            })
+          })
+        }
+      }
+
+      return currentFontSize;
+    };
+
     return {
 
       getFontSize: () => ({ state }) => {
-        const { from, to } = state.selection;
-        const isClick = from === to;
-
-        let currentFontSize = this.options.defaultSize;
-
-        if (isClick) {
-          const $pos = state.doc.resolve(from);
-          const marks = $pos.marks();
-          
-          for (const mark of marks) {
-            if (mark.type.name === this.name && mark.attrs.size) {
-              currentFontSize = mark.attrs.size;
-              break;
-            }
-          }
-        } 
-        else {
-          const marks = state.doc.rangeHasMark(from, to, this.type);
-          
-          if (marks) {
-            state.doc.nodesBetween(from, to, node => {
-              node.marks.forEach(mark => {
-                if (mark.type.name === this.name && mark.attrs.size) {
-                  currentFontSize = mark.attrs.size;
-                }
-              })
-            })
-          }
-        }
-
-        return currentFontSize;
+        return getCurrentFontSize(state);
       },
     
       setFontSize: size => ({ commands }) => {
@@ -76,41 +79,13 @@ const FontSize = Mark.create({
       },
 
       increaseFontSize: () => ({ state, commands }) => {
-        const { from, to } = state.selection;
-        const marks = state.doc.rangeHasMark(from, to, this.type);
-
-        let currentFontSize = this.options.defaultSize;
-
-        if (marks) {
-          state.doc.nodesBetween(from, to, node => {
-            node.marks.forEach(mark => {
-              if (mark.type.name === this.name && mark.attrs.size) {
-                currentFontSize = mark.attrs.size;
-              }
-            });
-          });
-        }
-
+        const currentFontSize = getCurrentFontSize(state);
         const newSize = (parseInt(currentFontSize.replace('px', '')) + this.options.step) + 'px';
         return commands.setMark(this.name, { size: newSize });
       },
 
       decreaseFontSize: () => ({ state, commands }) => {
-        const { from, to } = state.selection;
-        const marks = state.doc.rangeHasMark(from, to, this.type);
-
-        let currentFontSize = this.options.defaultSize;
-
-        if (marks) {
-          state.doc.nodesBetween(from, to, node => {
-            node.marks.forEach(mark => {
-              if (mark.type.name === this.name && mark.attrs.size) {
-                currentFontSize = mark.attrs.size;
-              }
-            });
-          });
-        }
-
+        const currentFontSize = getCurrentFontSize(state);
         const newSize = Math.max(1, parseInt(currentFontSize.replace('px', '')) - this.options.step) + 'px';
         return commands.setMark(this.name, { size: newSize });
       },
