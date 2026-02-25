@@ -11,7 +11,7 @@
   "author": "Arnaud ROYER",
   "license": "MIT",
   "dependencies": {
-    "@tiptap/core": "^2.11.7"
+    "@tiptap/core": "^3.20.0"
   },
   "repository": {
     "type": "git",
